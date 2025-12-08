@@ -290,7 +290,7 @@ class TabPFNBaseline(BaseModel):
             pass
 
         # default "auto" lets TabPFN pick.
-         env_device = os.environ.get("TABPFN_DEVICE")
+        env_device = os.environ.get("TABPFN_DEVICE")
         if env_device:
             device = env_device
         model = TabPFNClassifier(
