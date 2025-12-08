@@ -93,7 +93,6 @@ Examples:
         type=str,
         default="lgbm",
         choices=["rf", "lgbm", "xgb", "lr", "mlp", "ensemble", "tabpfn"],
-        default="rf",
          help="Which model to run",
 )
     parser.add_argument(
