@@ -406,12 +406,12 @@ class EnsembleModel:
         return None
 
 MODEL_REGISTRY = {
-    "rf": RandomForestBaseline,
-    "lgbm": LightGBMBaseline,
-    "xgb": XGBoostBaseline,
-    "lr": LogisticRegressionBaseline,
-    "mlp": MLPBaseline,
-    "ensemble": EnsembleBaseline,
+    "rf": RandomForestModel,
+    "lgbm": LightGBMModel,
+    "xgb": XGBoostModel,
+    "lr": LogisticRegressionModel,
+    "mlp": MLPModel,
+    "ensemble": EnsembleModel,
     "tabpfn": TabPFNBaseline,
 }
 
