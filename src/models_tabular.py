@@ -41,7 +41,6 @@ except ImportError:
 # TabPFN (pretrained HuggingFace weights for tabular data)
 try:
     from tabpfn import TabPFNClassifier
-
     HAS_TABPFN = True
 except ImportError:
     HAS_TABPFN = False
@@ -238,27 +237,24 @@ class MLPModel(BaseModel):
         super().__init__("MLP", model)
 
 
-class TabPFNModel(BaseModel):
+class TabPFNBaseline(BaseModel):
     """
-    Pretrained TabPFN classifier (HuggingFace-hosted weights).
-
-    Serves as the required baseline model.
+    Baseline model using TabPFNClassifier from the `tabpfn` package.
     """
 
     def __init__(
         self,
-        device="auto",
-        n_configurations=32,
-        n_estimators=None,
-        model_path=None,
-        model_version=None,
-        ignore_pretraining_limits=True,
+        device: str = "auto",
+        n_configurations: int = 32,
+        n_estimators: int | None = None,
+        model_path: str | None = None,
+        model_version: str | None = None,
+        ignore_pretraining_limits: bool = True,
     ):
         if not HAS_TABPFN:
             raise ImportError(
                 "TabPFN not installed. Install with: pip install tabpfn torch"
             )
-
         # TabPFN renamed N_ensemble_configurations -> n_estimators; keep old
         # argument for compatibility and map it to the new name.
         env_ensembles = os.environ.get("TABPFN_N_ESTIMATORS")
@@ -267,20 +263,23 @@ class TabPFNModel(BaseModel):
                 n_estimators = int(env_ensembles)
             except ValueError:
                 pass
+
         ensemble_size = n_estimators if n_estimators is not None else n_configurations
 
         # Respect an explicit path, otherwise let TabPFN pick based on the
         # configured model_version (defaults to v2 to avoid gated downloads).
-        path_env = os.environ.get("TABPFN_MODEL_PATH")
+         path_env = os.environ.get("TABPFN_MODEL_PATH")
         resolved_model_path = model_path or path_env
+
+        # 如果用户只写了 "v2" / "v2.5"，真正的选择交给 model_version
         if resolved_model_path and resolved_model_path.lower() in {"v2", "v2.5"}:
-            # Version strings are handled via model_version; treat as no explicit path.
             resolved_model_path = None
+
         if not resolved_model_path:
             resolved_model_path = "auto"
 
-        # Set desired model version for this process (env or parameter wins; default v2).
         version_choice = model_version or os.environ.get("TABPFN_MODEL_VERSION") or "v2"
+
         try:
             from tabpfn.settings import settings
             from tabpfn.constants import ModelVersion
@@ -291,15 +290,16 @@ class TabPFNModel(BaseModel):
             pass
 
         # default "auto" lets TabPFN pick.
-        env_device = os.environ.get("TABPFN_DEVICE")
+         env_device = os.environ.get("TABPFN_DEVICE")
         if env_device:
             device = env_device
-        model = TabPFNClassifier(
+         model = TabPFNClassifier(
             device=device,
             n_estimators=ensemble_size,
             model_path=resolved_model_path,
             ignore_pretraining_limits=ignore_pretraining_limits,
         )
+
         super().__init__("TabPFN-Baseline", model)
 
 
