@@ -268,7 +268,7 @@ class TabPFNBaseline(BaseModel):
 
         # Respect an explicit path, otherwise let TabPFN pick based on the
         # configured model_version (defaults to v2 to avoid gated downloads).
-         path_env = os.environ.get("TABPFN_MODEL_PATH")
+        path_env = os.environ.get("TABPFN_MODEL_PATH")
         resolved_model_path = model_path or path_env
 
         # 如果用户只写了 "v2" / "v2.5"，真正的选择交给 model_version
