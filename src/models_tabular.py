@@ -293,7 +293,7 @@ class TabPFNBaseline(BaseModel):
          env_device = os.environ.get("TABPFN_DEVICE")
         if env_device:
             device = env_device
-         model = TabPFNClassifier(
+        model = TabPFNClassifier(
             device=device,
             n_estimators=ensemble_size,
             model_path=resolved_model_path,
