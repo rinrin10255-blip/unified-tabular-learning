@@ -92,9 +92,10 @@ Examples:
         "--model",
         type=str,
         default="lgbm",
-        choices=["rf", "lgbm", "xgb", "lr", "mlp", "ensemble"],
-        help="Model type (default: lgbm)",
-    )
+        choices=["rf", "lgbm", "xgb", "lr", "mlp", "ensemble", "tabpfn"],
+        default="rf",
+         help="Which model to run",
+)
     parser.add_argument(
         "--no-cv",
         action="store_true",

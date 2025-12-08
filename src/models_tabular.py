@@ -405,6 +405,16 @@ class EnsembleModel:
             return np.sum(probas, axis=0) / sum(self.weights)
         return None
 
+MODEL_REGISTRY = {
+    "rf": RandomForestBaseline,
+    "lgbm": LightGBMBaseline,
+    "xgb": XGBoostBaseline,
+    "lr": LogisticRegressionBaseline,
+    "mlp": MLPBaseline,
+    "ensemble": EnsembleBaseline,
+    "tabpfn": TabPFNBaseline,
+}
+
 
 def get_model(model_name, **kwargs):
     """Return a model instance given a short name."""
