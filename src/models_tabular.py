@@ -32,12 +32,6 @@ except ImportError:
     HAS_XGBOOST = False
     print("Warning: XGBoost not installed. Run: pip install xgboost")
 
-try:
-    from catboost import CatBoostClassifier
-    HAS_CATBOOST = True
-except ImportError:
-    HAS_CATBOOST = False
-
 # TabPFN (pretrained HuggingFace weights for tabular data)
 try:
     from tabpfn import TabPFNClassifier
@@ -271,7 +265,6 @@ class TabPFNBaseline(BaseModel):
         path_env = os.environ.get("TABPFN_MODEL_PATH")
         resolved_model_path = model_path or path_env
 
-        # 如果用户只写了 "v2" / "v2.5"，真正的选择交给 model_version
         if resolved_model_path and resolved_model_path.lower() in {"v2", "v2.5"}:
             resolved_model_path = None
 
@@ -413,6 +406,7 @@ MODEL_REGISTRY = {
     "mlp": MLPModel,
     "ensemble": EnsembleModel,
     "tabpfn": TabPFNBaseline,
+    "baseline": TabPFNBaseline,
 }
 
 
@@ -430,8 +424,8 @@ def get_model(model_name, **kwargs):
         "mlp": MLPModel,
         "gb": GradientBoostingModel,
         "gradient_boosting": GradientBoostingModel,
-        "baseline": TabPFNModel,
-        "tabpfn": TabPFNModel,
+        "baseline": TabPFNBaseline,
+        "tabpfn": TabPFNBaseline,
     }
 
     model_name = model_name.lower()
